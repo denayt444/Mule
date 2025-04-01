@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>General Knowledge Quiz</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+        #quizContainer {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .question {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #f8f8f8;
+            transition: background-color 0.3s;
+        }
+        label:hover {
+            background-color: #e0e0e0;
+        }
+        button {
+            margin-top: 15px;
+            padding: 12px 25px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .result {
+            text-align: center;
+            font-size: 20px;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="quizContainer"></div>
+
+    <script>
+        let currentQuestionIndex = 0;
+        let score = 0;
+        const questions = [
+            {
+                question: "How high is Mount Soyra?",
+                options: ["3013k.m", "3000k.m", "2000k.m", "3040k.m"],
+                correct: "A"
+            },
+            {
+                question: "Which is the capital city of Eritrea?",
+                options: ["Keren", "Somal", "Asmara", "Ethiopia"],
+                correct: "C"
+            },
+            {
+                question: "Who is the president of Eritrea?",
+                options: ["Abi", "Ovama", "Tramp", "Essayas Afewerqi"],
+                correct: "D"
+            }
+        ];
+
+        function displayQuestion() {
+            const quizContainer = document.getElementById('quizContainer');
+            
+            if (currentQuestionIndex >= questions.length) {
+                showResult();
+                return;
+            }
+
+            const q = questions[currentQuestionIndex];
+            let html = `<div class="question">
+                <h3>Question ${currentQuestionIndex + 1} of ${questions.length}</h3>
+                <p>${q.question}</p>
+                <form onsubmit="event.preventDefault(); checkAnswer()">`;
+
+            q.options.forEach((option, index) => {
+                const letter = String.fromCharCode(65 + index);
+                html += `
+                    <label>
+                        <input type="radio" name="answer" value="${letter}" required>
+                        ${letter}. ${option}
+                    </label>`;
+            });
+
+            html += `
+                <button type="submit">Submit Answer</button>
+                </form>
+                </div>`;
+
+            quizContainer.innerHTML = html;
+        }
+
+        function checkAnswer() {
+            const selected = document.querySelector('input[name="answer"]:checked');
+            if (!selected) return;
+
+            const userAnswer = selected.value;
+            const correctAnswer = questions[currentQuestionIndex].correct;
+            
+            if (userAnswer === correctAnswer) {
+                score++;
+            }
+
+            currentQuestionIndex++;
+            displayQuestion();
+        }
+
+        function showResult() {
+            const html = `
+                <div class="result">
+                    <h2>Quiz Completed! 🎉</h2>
+                    <p>Your final score: <strong>${score}/${questions.length}</strong></p>
+                    ${score === questions.length ? '<p>Perfect Score! 🏆</p>' : ''}
+                </div>`;
+            
+            document.getElementById('quizContainer').innerHTML = html;
+        }
+
+        // Initialize the quiz
+        displayQuestion();
+    </script>
+</body>
+</html>
